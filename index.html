@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=2">
-  <script src="app.js?v=6" defer></script>
+  <link rel="stylesheet" href="styles.css?v=3">
+  <script src="app.js?v=15" defer></script>
 </head>
 <body>
   <header class="topbar">
@@ -91,7 +91,7 @@
         <div class="deck-build-count"><span>DECK SIZE</span><strong><b id="deck-count">00</b><i>/ 40</i></strong></div>
         <div class="deck-build-meter" aria-hidden="true"><span id="deck-build-meter-fill"></span></div>
         <p id="deck-status-message" aria-live="polite">Choose 40 cards to complete your deck.</p>
-        <button class="pick-button" id="complete-deck" type="button" disabled><span>COMPLETE DECK</span><b aria-hidden="true">✓</b></button>
+        <button class="pick-button" id="complete-deck" type="button" disabled><span>START DUEL</span><b aria-hidden="true">→</b></button>
       </div>
       <div class="deck-build-columns">
         <section class="deck-column" aria-labelledby="available-title">
@@ -107,6 +107,37 @@
         </section>
       </div>
     </section>
+
+    <section class="duel-screen" id="duel-screen" aria-label="Duel match" hidden>
+      <header class="duel-header">
+        <div><p class="eyebrow">DM-01 <span>/</span> PRACTICE DUEL</p><h2 id="duel-turn-label">YOUR TURN</h2></div>
+        <button class="text-action" id="return-to-deck" type="button">Back to deck</button>
+      </header>
+      <div class="duel-scoreboard">
+        <div class="duel-player-score"><span>YOU</span><strong id="player-shield-count">5</strong><small>SHIELDS</small></div>
+        <div class="duel-score-center"><span id="duel-round-label">TURN 01</span><strong id="duel-message">The duel begins.</strong></div>
+        <div class="duel-player-score opponent"><span id="bot-duel-name">BOT</span><strong id="bot-shield-count">5</strong><small>SHIELDS</small></div>
+      </div>
+      <div class="duel-arena">
+        <section class="duel-half opponent-half" aria-label="Opponent field">
+          <div class="duel-zone-heading"><strong>OPPONENT</strong><span><b id="bot-hand-count">5</b> IN HAND <i>/</i> <b id="bot-deck-count">30</b> DECK</span></div>
+          <div class="shield-row" id="bot-shields" aria-label="Opponent shields"></div>
+          <div class="battlefield" id="bot-battlefield"></div>
+        </section>
+        <div class="duel-midline"><span id="duel-priority">YOUR TURN</span><div class="duel-midline-actions"><button class="pick-button" id="attack-shields" type="button" hidden><span>ATTACK SHIELDS</span><b aria-hidden="true">→</b></button><button class="pick-button" id="end-turn" type="button"><span>END TURN</span><b aria-hidden="true">→</b></button></div></div>
+        <section class="duel-half player-half" aria-label="Your field">
+          <div class="battlefield" id="player-battlefield"></div>
+          <div class="shield-row" id="player-shields" aria-label="Your shields"></div>
+          <div class="duel-zone-heading"><strong>YOUR FIELD</strong><span><b id="player-deck-count">30</b> DECK <i>/</i> GRAVE <b id="player-grave-count">0</b></span></div>
+          <div class="mana-heading"><strong>MANA</strong><span id="player-mana-count">0 / 0</span></div>
+          <div class="mana-row" id="player-mana"></div>
+          <div class="hand-heading"><strong>YOUR HAND</strong><span id="player-hand-count">5 CARDS</span></div>
+          <div class="duel-hand" id="player-hand"></div>
+          <div class="duel-card-actions" id="duel-card-actions"><span>Select a card from your hand.</span></div>
+        </section>
+      </div>
+      <div class="duel-feed" id="duel-feed" aria-live="polite"></div>
+    </section>
   </main>
 
   <div class="modal-backdrop hidden" id="summary-modal" role="dialog" aria-modal="true" aria-labelledby="summary-title">
@@ -120,6 +151,17 @@
       <div class="summary-actions">
         <button class="pick-button" id="build-deck" type="button"><span>BUILD A 40-CARD DECK</span><b aria-hidden="true">→</b></button>
         <button class="text-action" id="restart-summary" type="button">Deal again</button>
+      </div>
+    </section>
+  </div>
+  <div class="modal-backdrop hidden" id="duel-result-modal" role="dialog" aria-modal="true" aria-labelledby="duel-result-title">
+    <section class="summary-modal">
+      <p class="eyebrow">PRACTICE DUEL <span>/</span> DM-01</p>
+      <h2 id="duel-result-title">Victory.</h2>
+      <p class="summary-copy" id="duel-result-copy"></p>
+      <div class="summary-actions">
+        <button class="pick-button" id="return-to-results" type="button"><span>BACK TO DECK</span><b aria-hidden="true">→</b></button>
+        <button class="text-action" id="play-again" type="button">Play another duel</button>
       </div>
     </section>
   </div>
