@@ -18,3 +18,6 @@ Open `index.html` in a browser. No install or server is required.
 
 Bot picks use a lightweight civilization preference heuristic rather than a competitive draft model. Card images come from the local `DM-01/` folder.
 
+## Missing Features
+- Shield break triggers
+- Requierd actions (e.g. have to attack)
