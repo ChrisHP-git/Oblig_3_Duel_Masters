@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=2">
-  <script src="app.js?v=4" defer></script>
+  <script src="app.js?v=6" defer></script>
 </head>
 <body>
   <header class="topbar">
@@ -42,7 +42,7 @@
       </div>
     </section>
 
-    <section class="draft-layout" aria-label="Draft table">
+    <section class="draft-layout" id="draft-layout" aria-label="Draft table">
       <div class="draft-column">
         <div class="table-head">
           <div class="table-label"><span class="table-icon">D</span><div><strong>THE DRAFT TABLE</strong><small id="table-subtitle">Your opening pack is ready.</small></div></div>
@@ -53,7 +53,10 @@
         <div class="card-grid" id="card-grid" aria-label="Cards in your pack"></div>
         <div class="table-footer">
           <div class="selection-note" id="selection-note"><span class="keycap">CLICK</span> a card to inspect it</div>
-          <button class="pick-button" id="pick-button" type="button" disabled><span>PICK CARD</span><b aria-hidden="true">→</b></button>
+          <div class="table-actions">
+            <button class="pick-button build-deck-link" id="build-deck-open" type="button" hidden><span>BUILD DECK</span><b aria-hidden="true">→</b></button>
+            <button class="pick-button" id="pick-button" type="button" disabled><span>PICK CARD</span><b aria-hidden="true">→</b></button>
+          </div>
         </div>
         <div class="draft-log" id="draft-log" aria-live="polite"><span class="log-mark"></span><span id="log-message">The table is yours. Choose a card to get started.</span></div>
       </div>
@@ -74,6 +77,36 @@
         <div class="tip-strip"><span class="tip-icon">!</span><p><strong>Draft note</strong><br>Bot picks favor strong cards and colors they have already drafted.</p></div>
       </aside>
     </section>
+
+    <section class="deck-builder" id="deck-builder" aria-labelledby="deck-builder-title" hidden>
+      <div class="deck-builder-head">
+        <div>
+          <p class="eyebrow">DM-01 <span>/</span> DECK CONSTRUCTION</p>
+          <h2 id="deck-builder-title">Choose your 40.</h2>
+          <p class="deck-builder-copy">Select cards from your drafted pool. You can change your picks until the deck is complete.</p>
+        </div>
+        <button class="icon-button" id="back-to-results" type="button" aria-label="Back to draft results" title="Back to draft results">↶</button>
+      </div>
+      <div class="deck-build-status">
+        <div class="deck-build-count"><span>DECK SIZE</span><strong><b id="deck-count">00</b><i>/ 40</i></strong></div>
+        <div class="deck-build-meter" aria-hidden="true"><span id="deck-build-meter-fill"></span></div>
+        <p id="deck-status-message" aria-live="polite">Choose 40 cards to complete your deck.</p>
+        <button class="pick-button" id="complete-deck" type="button" disabled><span>COMPLETE DECK</span><b aria-hidden="true">✓</b></button>
+      </div>
+      <div class="deck-build-columns">
+        <section class="deck-column" aria-labelledby="available-title">
+          <div class="deck-column-head">
+            <div><p class="eyebrow">YOUR DRAFT</p><h3 id="available-title">Available cards <span id="available-count">50</span></h3></div>
+            <label class="filter-control" for="deck-civ-filter"><span>FILTER</span><select id="deck-civ-filter"><option value="all">All civilizations</option><option value="Light">Light</option><option value="Water">Water</option><option value="Darkness">Darkness</option><option value="Fire">Fire</option><option value="Nature">Nature</option></select></label>
+          </div>
+          <div class="deck-card-list" id="available-cards"></div>
+        </section>
+        <section class="deck-column selected-deck-column" aria-labelledby="selected-title">
+          <div class="deck-column-head"><div><p class="eyebrow">YOUR BUILD</p><h3 id="selected-title">Selected cards <span id="selected-count">00</span></h3></div></div>
+          <div class="deck-card-list" id="selected-cards"><p class="empty-state">Add cards from your pool to build your deck.</p></div>
+        </section>
+      </div>
+    </section>
   </main>
 
   <div class="modal-backdrop hidden" id="summary-modal" role="dialog" aria-modal="true" aria-labelledby="summary-title">
@@ -84,7 +117,10 @@
       <p class="summary-copy">Five packs, fifty picks. Here is the crew you drafted.</p>
       <div class="summary-stats"><div><strong id="summary-total">45</strong><span>CARDS DRAFTED</span></div><div><strong id="summary-colors">0</strong><span>CIVILIZATIONS</span></div><div><strong id="summary-bots">7</strong><span>BOTS OUTDRAFTED</span></div></div>
       <div class="summary-colors" id="summary-civ-list"></div>
-      <button class="pick-button restart-button" id="restart-summary" type="button"><span>DEAL AGAIN</span><b aria-hidden="true">↻</b></button>
+      <div class="summary-actions">
+        <button class="pick-button" id="build-deck" type="button"><span>BUILD A 40-CARD DECK</span><b aria-hidden="true">→</b></button>
+        <button class="text-action" id="restart-summary" type="button">Deal again</button>
+      </div>
     </section>
   </div>
 </body>

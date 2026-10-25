@@ -12,6 +12,7 @@ Open `index.html` in a browser. No install or server is required.
 - Seven bots pick from their packs; packs alternate passing direction each round.
 - The draft uses the 120 card images in `DM-01/` and prevents duplicates inside a pack.
 - Packs follow the standard 30-pack collation: 18 common runs, 8 very-rare runs, and 4 super-rare runs. Puzzle inserts are replaced by commons to keep all 10 slots draftable. Common runs contain one rare, three uncommons, and six commons; VR/SR runs contain one rare, one hit, three uncommons, and five commons.
+- After drafting, build a 40-card deck from your pool. Repeated copies are stacked with counts; add or remove one copy at a time, and complete the deck only at exactly 40.
 - Track your picks by civilization and restart for another draft.
 
 Bot picks use a lightweight civilization preference heuristic rather than a competitive draft model. Card images come from the local `DM-01/` folder.

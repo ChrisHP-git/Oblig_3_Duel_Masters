@@ -68,6 +68,10 @@ const cardGrid = document.querySelector("#card-grid");
 const pickButton = document.querySelector("#pick-button");
 const logMessage = document.querySelector("#log-message");
 const summaryModal = document.querySelector("#summary-modal");
+const draftLayout = document.querySelector("#draft-layout");
+const deckBuilder = document.querySelector("#deck-builder");
+let selectedDeckCardIds = new Set();
+let deckSaved = false;
 
 function shuffled(items) {
   const result = [...items];
@@ -166,6 +170,7 @@ function draftSelectedCard() {
   if (pickNumber >= picksPerPack) {
     if (packNumber >= totalPacks) {
       isDraftComplete = true;
+      document.querySelector("#build-deck-open").hidden = false;
       logMessage.textContent = "All five packs are drafted. Nice work at the table.";
       render();
       showSummary();
@@ -203,6 +208,17 @@ function renderCards() {
   });
 }
 
+function groupCards(cards) {
+  const groups = new Map();
+  cards.forEach((card) => {
+    if (!groups.has(card.name)) groups.set(card.name, { card, copies: [] });
+    groups.get(card.name).copies.push(card);
+  });
+  return [...groups.values()].sort((first, second) => (
+    first.card.name.localeCompare(second.card.name, "en", { sensitivity: "base" })
+  ));
+}
+
 function renderPool() {
   document.querySelector("#pool-count").textContent = String(playerPicks.length).padStart(2, "0");
   document.querySelector("#deck-meter-fill").style.width = `${(playerPicks.length / (totalPacks * picksPerPack)) * 100}%`;
@@ -213,7 +229,7 @@ function renderPool() {
   if (!playerPicks.length) {
     pickedList.innerHTML = '<p class="empty-state">Your picks will appear here.</p>';
   } else {
-    pickedList.innerHTML = [...playerPicks].reverse().slice(0, 18).map((card) => `<div class="picked-row"><span>${card.name}</span><small>${civilizations[card.civ].short} / ${card.rarity}</small></div>`).join("");
+    pickedList.innerHTML = groupCards([...playerPicks].reverse()).map(({ card, copies }) => `<div class="picked-row"><span>${card.name}</span><small>${civilizations[card.civ].short} / ${card.rarity} <b class="copy-count">×${copies.length}</b></small></div>`).join("");
   }
 }
 
@@ -242,6 +258,85 @@ function render() {
   pickButton.disabled = selectedCardId === null || isDraftComplete;
 }
 
+function renderDeckCard(card, copies, isSelected) {
+  const row = document.createElement("div");
+  row.className = `deck-card-row${isSelected ? " selected" : ""}`;
+
+  const image = document.createElement("img");
+  image.className = "deck-row-image";
+  image.src = card.image;
+  image.alt = "";
+  image.loading = "lazy";
+
+  const details = document.createElement("div");
+  details.className = "deck-row-details";
+  details.innerHTML = `<strong>${card.name}</strong><small>${card.civ} / ${card.rarity} <b class="copy-count">×${copies.length}</b></small>`;
+
+  const action = document.createElement("button");
+  action.type = "button";
+  action.className = `deck-row-action${isSelected ? " remove" : " add"}`;
+  action.textContent = isSelected ? "−" : "+";
+  action.setAttribute("aria-label", `${isSelected ? "Remove one" : "Add one"} ${card.name} ${isSelected ? "copy from" : "copy to"} deck`);
+  action.title = `${isSelected ? "Remove one" : "Add one"} copy (${copies.length} ${isSelected ? "selected" : "available"})`;
+  action.disabled = !isSelected && selectedDeckCardIds.size >= 40;
+  action.addEventListener("click", () => {
+    if (isSelected) {
+      selectedDeckCardIds.delete(copies[copies.length - 1].id);
+      deckSaved = false;
+    } else if (selectedDeckCardIds.size < 40) {
+      selectedDeckCardIds.add(copies[0].id);
+    }
+    renderDeckBuilder();
+  });
+
+  row.append(image, details, action);
+  return row;
+}
+
+function renderDeckBuilder() {
+  const filter = document.querySelector("#deck-civ-filter").value;
+  const selectedCopies = playerPicks.filter((card) => selectedDeckCardIds.has(card.id));
+  const availableCopies = playerPicks.filter((card) => (
+    !selectedDeckCardIds.has(card.id) && (filter === "all" || card.civ === filter)
+  ));
+  const selectedCards = groupCards(selectedCopies);
+  const availableCards = groupCards(availableCopies);
+  const availableList = document.querySelector("#available-cards");
+  const selectedList = document.querySelector("#selected-cards");
+
+  availableList.replaceChildren();
+  selectedList.replaceChildren();
+  availableCards.forEach(({ card, copies }) => availableList.append(renderDeckCard(card, copies, false)));
+  selectedCards.forEach(({ card, copies }) => selectedList.append(renderDeckCard(card, copies, true)));
+
+  if (!selectedCards.length) {
+    selectedList.innerHTML = '<p class="empty-state">Add cards from your pool to build your deck.</p>';
+  }
+
+  const count = selectedCopies.length;
+  document.querySelector("#deck-count").textContent = String(count).padStart(2, "0");
+  document.querySelector("#selected-count").textContent = String(count).padStart(2, "0");
+  document.querySelector("#available-count").textContent = String(availableCopies.length).padStart(2, "0");
+  document.querySelector("#deck-build-meter-fill").style.width = `${(count / 40) * 100}%`;
+  document.querySelector("#deck-status-message").textContent = deckSaved
+    ? "Your 40-card deck is ready."
+    : count === 40
+      ? "40 of 40 selected. Complete your deck."
+      : `${count} of 40 selected. Choose ${40 - count} more.`;
+  const completeButton = document.querySelector("#complete-deck");
+  completeButton.disabled = count !== 40 || deckSaved;
+  completeButton.querySelector("span").textContent = deckSaved ? "DECK READY" : "COMPLETE DECK";
+}
+
+function openDeckBuilder() {
+  if (!isDraftComplete) return;
+  summaryModal.classList.add("hidden");
+  draftLayout.hidden = true;
+  deckBuilder.hidden = false;
+  renderDeckBuilder();
+  document.querySelector("#deck-civ-filter").focus();
+}
+
 function showSummary() {
   const counts = Object.fromEntries(Object.keys(civilizations).map((civ) => [civ, 0]));
   playerPicks.forEach((card) => { counts[card.civ] += 1; });
@@ -258,15 +353,33 @@ function restartDraft() {
   seatPacks = [];
   playerPicks = [];
   selectedCardId = null;
+  selectedDeckCardIds = new Set();
+  deckSaved = false;
   cardId = 0;
   boosterRunQueue = createDraftRunSchedule();
   isDraftComplete = false;
+  document.querySelector("#build-deck-open").hidden = true;
+  draftLayout.hidden = false;
+  deckBuilder.hidden = true;
   bots.forEach((bot) => { bot.picks = []; });
   summaryModal.classList.add("hidden");
   startPack();
 }
 
 pickButton.addEventListener("click", draftSelectedCard);
+document.querySelector("#build-deck").addEventListener("click", openDeckBuilder);
+document.querySelector("#build-deck-open").addEventListener("click", openDeckBuilder);
+document.querySelector("#back-to-results").addEventListener("click", () => {
+  deckBuilder.hidden = true;
+  draftLayout.hidden = false;
+  showSummary();
+});
+document.querySelector("#deck-civ-filter").addEventListener("change", renderDeckBuilder);
+document.querySelector("#complete-deck").addEventListener("click", () => {
+  if (selectedDeckCardIds.size !== 40) return;
+  deckSaved = true;
+  renderDeckBuilder();
+});
 document.querySelector("#restart-top").addEventListener("click", restartDraft);
 document.querySelector("#restart-summary").addEventListener("click", restartDraft);
 document.querySelector("#close-summary").addEventListener("click", () => summaryModal.classList.add("hidden"));
