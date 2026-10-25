@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f2f2eb">
+  <title>Duel Masters | Draft Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Duel Masters draft room home">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="brand-copy"><strong>DUEL MASTERS</strong><small>DRAFT ROOM</small></span>
+    </a>
+    <div class="topbar-right">
+      <span class="format-tag"><span class="live-dot"></span> DM-01 / PRACTICE DRAFT</span>
+      <button class="icon-button" id="restart-top" type="button" aria-label="Restart draft" title="Restart draft">↻</button>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="intro-row">
+      <div>
+        <p class="eyebrow">SOLO TABLE <span>/</span> 8 SEATS</p>
+        <h1>Build your <em>army.</em></h1>
+      </div>
+      <div class="round-track" aria-label="Draft progress">
+        <div class="round-step active" data-step="1"><span>01</span><b>PACK ONE</b></div>
+        <span class="track-line"></span>
+        <div class="round-step" data-step="2"><span>02</span><b>PACK TWO</b></div>
+        <span class="track-line"></span>
+        <div class="round-step" data-step="3"><span>03</span><b>PACK THREE</b></div>
+      </div>
+    </section>
+
+    <section class="draft-layout" aria-label="Draft table">
+      <div class="draft-column">
+        <div class="table-head">
+          <div class="table-label"><span class="table-icon">D</span><div><strong>THE DRAFT TABLE</strong><small id="table-subtitle">Your opening pack is ready.</small></div></div>
+          <div class="turn-readout"><span id="pack-label">PACK 01 / 03</span><strong id="pick-label">PICK 01 <i>/ 15</i></strong></div>
+        </div>
+
+        <div class="pack-progress" aria-hidden="true"><span id="pack-progress-fill"></span></div>
+        <div class="card-grid" id="card-grid" aria-label="Cards in your pack"></div>
+        <div class="table-footer">
+          <div class="selection-note" id="selection-note"><span class="keycap">CLICK</span> a card to inspect it</div>
+          <button class="pick-button" id="pick-button" type="button" disabled><span>PICK CARD</span><b aria-hidden="true">→</b></button>
+        </div>
+        <div class="draft-log" id="draft-log" aria-live="polite"><span class="log-mark"></span><span id="log-message">The table is yours. Choose a card to get started.</span></div>
+      </div>
+
+      <aside class="side-column">
+        <section class="side-section deck-section">
+          <div class="section-heading"><div><p class="eyebrow">YOUR PICKS</p><h2>Draft pool</h2></div><span class="deck-counter"><b id="pool-count">00</b><small>/ 45</small></span></div>
+          <div class="deck-meter"><span id="deck-meter-fill"></span></div>
+          <div class="civ-counts" id="civ-counts"></div>
+          <div class="picked-list" id="picked-list"><p class="empty-state">Your picks will appear here.</p></div>
+        </section>
+
+        <section class="side-section pod-section">
+          <div class="section-heading compact"><div><p class="eyebrow">THE POD</p><h2>At this table</h2></div><span class="seat-count">08 SEATS</span></div>
+          <div class="seat-list" id="seat-list"></div>
+        </section>
+
+        <div class="tip-strip"><span class="tip-icon">!</span><p><strong>Draft note</strong><br>Bot picks favor strong cards and colors they have already drafted.</p></div>
+      </aside>
+    </section>
+  </main>
+
+  <div class="modal-backdrop hidden" id="summary-modal" role="dialog" aria-modal="true" aria-labelledby="summary-title">
+    <section class="summary-modal">
+      <button class="modal-close" id="close-summary" type="button" aria-label="Close summary">×</button>
+      <p class="eyebrow">DRAFT COMPLETE <span>/</span> DM-01</p>
+      <h2 id="summary-title">The table is yours.</h2>
+      <p class="summary-copy">Three packs, forty-five picks. Here is the crew you drafted.</p>
+      <div class="summary-stats"><div><strong id="summary-total">45</strong><span>CARDS DRAFTED</span></div><div><strong id="summary-colors">0</strong><span>CIVILIZATIONS</span></div><div><strong id="summary-bots">7</strong><span>BOTS OUTDRAFTED</span></div></div>
+      <div class="summary-colors" id="summary-civ-list"></div>
+      <button class="pick-button restart-button" id="restart-summary" type="button"><span>DEAL AGAIN</span><b aria-hidden="true">↻</b></button>
+    </section>
+  </div>
+</body>
+</html>
