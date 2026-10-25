@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <script src="app.js" defer></script>
+  <link rel="stylesheet" href="styles.css?v=2">
+  <script src="app.js?v=4" defer></script>
 </head>
 <body>
   <header class="topbar">
@@ -30,11 +30,15 @@
         <h1>Build your <em>army.</em></h1>
       </div>
       <div class="round-track" aria-label="Draft progress">
-        <div class="round-step active" data-step="1"><span>01</span><b>PACK ONE</b></div>
+        <div class="round-step active" data-step="1"><span>01</span><b>PACK 01</b></div>
         <span class="track-line"></span>
-        <div class="round-step" data-step="2"><span>02</span><b>PACK TWO</b></div>
+        <div class="round-step" data-step="2"><span>02</span><b>PACK 02</b></div>
         <span class="track-line"></span>
-        <div class="round-step" data-step="3"><span>03</span><b>PACK THREE</b></div>
+        <div class="round-step" data-step="3"><span>03</span><b>PACK 03</b></div>
+        <span class="track-line"></span>
+        <div class="round-step" data-step="4"><span>04</span><b>PACK 04</b></div>
+        <span class="track-line"></span>
+        <div class="round-step" data-step="5"><span>05</span><b>PACK 05</b></div>
       </div>
     </section>
 
@@ -42,7 +46,7 @@
       <div class="draft-column">
         <div class="table-head">
           <div class="table-label"><span class="table-icon">D</span><div><strong>THE DRAFT TABLE</strong><small id="table-subtitle">Your opening pack is ready.</small></div></div>
-          <div class="turn-readout"><span id="pack-label">PACK 01 / 03</span><strong id="pick-label">PICK 01 <i>/ 15</i></strong></div>
+          <div class="turn-readout"><span id="pack-label">PACK 01 / 05</span><strong id="pick-label">PICK 01 <i>/ 10</i></strong></div>
         </div>
 
         <div class="pack-progress" aria-hidden="true"><span id="pack-progress-fill"></span></div>
@@ -56,7 +60,7 @@
 
       <aside class="side-column">
         <section class="side-section deck-section">
-          <div class="section-heading"><div><p class="eyebrow">YOUR PICKS</p><h2>Draft pool</h2></div><span class="deck-counter"><b id="pool-count">00</b><small>/ 45</small></span></div>
+          <div class="section-heading"><div><p class="eyebrow">YOUR PICKS</p><h2>Draft pool</h2></div><span class="deck-counter"><b id="pool-count">00</b><small>/ 50</small></span></div>
           <div class="deck-meter"><span id="deck-meter-fill"></span></div>
           <div class="civ-counts" id="civ-counts"></div>
           <div class="picked-list" id="picked-list"><p class="empty-state">Your picks will appear here.</p></div>
@@ -77,7 +81,7 @@
       <button class="modal-close" id="close-summary" type="button" aria-label="Close summary">×</button>
       <p class="eyebrow">DRAFT COMPLETE <span>/</span> DM-01</p>
       <h2 id="summary-title">The table is yours.</h2>
-      <p class="summary-copy">Three packs, forty-five picks. Here is the crew you drafted.</p>
+      <p class="summary-copy">Five packs, fifty picks. Here is the crew you drafted.</p>
       <div class="summary-stats"><div><strong id="summary-total">45</strong><span>CARDS DRAFTED</span></div><div><strong id="summary-colors">0</strong><span>CIVILIZATIONS</span></div><div><strong id="summary-bots">7</strong><span>BOTS OUTDRAFTED</span></div></div>
       <div class="summary-colors" id="summary-civ-list"></div>
       <button class="pick-button restart-button" id="restart-summary" type="button"><span>DEAL AGAIN</span><b aria-hidden="true">↻</b></button>

@@ -6,41 +6,54 @@ const civilizations = {
   Nature: { color: "#72a96b", sigil: "*", short: "N" },
 };
 
+const cardNamesByCiv = {
+  Light: "Chilias, the Oracle|Dia Nork, Moonlight Guardian|Emerald Grass|Frei, Vizier of Air|Gran Gure, Space Guardian|Holy Awe|Iere, Vizier of Bullets|Iocant, the Oracle|La Ura Giga, Sky Guardian|Lah, Purification Enforcer|Laser Wing|Lok, Vizier of Hunting|Miele, Vizier of Lightning|Moonlight Flash|Rayla, Truth Enforcer|Reusol, the Oracle|Ruby Grass|Senatine Jade Tree|Solar Ray|Sonic Wing|Szubs Kin, Twilight Guardian|Toel, Vizier of Hope",
+  Water: "Aqua Hulcus|Aqua Knight|Aqua Soldier|Aqua Vehicle|Brain Serum|Candy Drop|Crystal Memory|Faerie Child|Hunter Fish|Illusionary Merfolk|King Coral|King Ripped-Hide|Marine Flower|Phantom Fish|Revolver Fish|Saucer-Head Shark|Seamine|Spiral Gate|Teleportation|Tropico|Unicorn Fish|Virtual Tripwire",
+  Darkness: "Black Feather, Shadow of Rage|Bloody Squito|Bone Assassin, the Ripper|Bone Spider|Creeping Plague|Dark Clown|Dark Raven, Shadow of Grief|Dark Reversal|Death Smoke|Ghost Touch|Gigaberos|Gigagiele|Gigargon|Masked Horror, Shadow of Scorn|Night Master, Shadow of Decay|Skeleton Soldier, the Defiled|Stinger Worm|Swamp Worm|Terror Pit|Vampire Silphy|Wandering Braineater|Writhing Bone Ghoul",
+  Fire: "Armored Walker Urherion|Artisan Picora|Bolshack Dragon|Brawler Zyler|Burning Power|Chaos Strike|Crimson Hammer|Deadly Fighter Braid Claw|Draglide|Explosive Fighter Ucarn|Fatal Attacker Horvath|Fire Sweeper Burning Hellion|Gatling Skyterror|Immortal Baron, Vorg|Magma Gazer|Meteosaur|Nomad Hero Gigio|Onslaughter Triceps|Rothus, the Traveler|Stonesaur|Super Explosive Volcanodon|Tornado Flame",
+  Nature: "Aura Blast|Bronze-Arm Tribe|Burning Mane|Coiling Vines|Dimension Gate|Dome Shell|Fear Fang|Forest Hornet|Golden Wing Striker|Mighty Shouter|Natural Snare|Pangaea's Song|Poisonous Dahlia|Poisonous Mushroom|Red-Eye Scorpion|Stampeding Longhorn|Steel Smasher|Storm Shell|Thorny Mandra|Tower Shell|Tri-horn Shepherd|Ultimate Force",
+};
+const cardNamesByRarity = {
+  C: "Aqua Hulcus|Aqua Vehicle|Artisan Picora|Black Feather, Shadow of Rage|Bloody Squito|Bone Assassin, the Ripper|Brawler Zyler|Bronze-Arm Tribe|Burning Mane|Burning Power|Candy Drop|Crimson Hammer|Deadly Fighter Braid Claw|Death Smoke|Dimension Gate|Emerald Grass|Fatal Attacker Horvath|Fear Fang|Fire Sweeper Burning Hellion|Ghost Touch|Golden Wing Striker|Hunter Fish|Iere, Vizier of Bullets|Immortal Baron, Vorg|La Ura Giga, Sky Guardian|Marine Flower|Miele, Vizier of Lightning|Mighty Shouter|Phantom Fish|Reusol, the Oracle|Senatine Jade Tree|Skeleton Soldier, the Defiled|Solar Ray|Sonic Wing|Spiral Gate|Steel Smasher|Ultimate Force|Virtual Tripwire|Wandering Braineater|Writhing Bone Ghoul",
+  U: "Aqua Soldier|Armored Walker Urherion|Bone Spider|Brain Serum|Coiling Vines|Dark Raven, Shadow of Grief|Dark Reversal|Dome Shell|Faerie Child|Forest Hornet|Frei, Vizier of Air|Illusionary Merfolk|Iocant, the Oracle|King Coral|Lok, Vizier of Hunting|Masked Horror, Shadow of Scorn|Meteosaur|Moonlight Flash|Onslaughter Triceps|Pangaea's Song|Poisonous Dahlia|Poisonous Mushroom|Revolver Fish|Ruby Grass|Stinger Worm|Stonesaur|Super Explosive Volcanodon|Swamp Worm|Toel, Vizier of Hope|Tornado Flame",
+  R: "Aqua Knight|Aura Blast|Bombersaur|Chaos Strike|Chilias, the Oracle|Creeping Plague|Crystal Memory|Dark Clown|Dia Nork, Moonlight Guardian|Dogarn, the Marauder|Draglide|Explosive Fighter Ucarn|Gigaberos|Gigagiele|Holy Awe|Lah, Purification Enforcer|Laser Wing|Magma Gazer|Natural Snare|Night Master, Shadow of Decay|Nomad Hero Gigio|Red-Eye Scorpion|Rothus, the Traveler|Saucer-Head Shark|Stampeding Longhorn|Storm Shell|Szubs Kin, Twilight Guardian|Teleportation|Terror Pit|Tri-horn Shepherd|Tropico|Unicorn Fish",
+  VR: "Bolshack Dragon|Gatling Skyterror|Gigargon|Gran Gure, Space Guardian|King Ripped-Hide|Rayla, Truth Enforcer|Seamine|Thorny Mandra|Tower Shell|Vampire Silphy",
+  SR: "Aqua Sniper|Astrocomet Dragon|Deathblade Beetle|Deathliger, Lion of Chaos|Hanusa, Radiance Elemental|King Depthcon|Roaring Great-Horn|Scarlet Skyterror|Urth, Purifying Elemental|Zagaan, Knight of Darkness",
+};
+const rarityByName = new Map(Object.entries(cardNamesByRarity).flatMap(([rarity, names]) => names.split("|").map((name) => [name, rarity])));
+const superRareNamesByCiv = {
+  Light: ["Hanusa, Radiance Elemental", "Urth, Purifying Elemental"],
+  Water: ["Aqua Sniper", "King Depthcon"],
+  Darkness: ["Deathliger, Lion of Chaos", "Zagaan, Knight of Darkness"],
+  Fire: ["Astrocomet Dragon", "Scarlet Skyterror"],
+  Nature: ["Deathblade Beetle", "Roaring Great-Horn"],
+};
+const imageNameOverrides = { "Pangaea's Song": "Pangaea_s Song" };
 const cardPool = [
-  { name: "La Ura Giga", civ: "Light", cost: 1, power: 2000, type: "Guardian", rarity: "C" },
-  { name: "Urth, Purifying Elemental", civ: "Light", cost: 7, power: 5500, type: "Angel Command", rarity: "R" },
-  { name: "Hanusa, Radiance Elemental", civ: "Light", cost: 6, power: 8500, type: "Angel Command", rarity: "VR" },
-  { name: "Holy Awe", civ: "Light", cost: 6, power: 0, type: "Spell", rarity: "R" },
-  { name: "Diamond Cutter", civ: "Light", cost: 5, power: 0, type: "Spell", rarity: "U" },
-  { name: "Aqua Hulcus", civ: "Water", cost: 3, power: 2000, type: "Cyber Lord", rarity: "U" },
-  { name: "Aqua Sniper", civ: "Water", cost: 8, power: 5000, type: "Liquid People", rarity: "R" },
-  { name: "Crystal Paladin", civ: "Water", cost: 4, power: 5000, type: "Liquid People", rarity: "VR" },
-  { name: "Crystal Lancer", civ: "Water", cost: 6, power: 8000, type: "Liquid People", rarity: "R" },
-  { name: "Marine Flower", civ: "Water", cost: 1, power: 2000, type: "Fish", rarity: "C" },
-  { name: "Bloody Squito", civ: "Darkness", cost: 1, power: 1000, type: "Ghost", rarity: "C" },
-  { name: "Horrid Worm", civ: "Darkness", cost: 2, power: 2000, type: "Parasite Worm", rarity: "C" },
-  { name: "Terror Pit", civ: "Darkness", cost: 7, power: 0, type: "Spell", rarity: "R" },
-  { name: "Death Smoke", civ: "Darkness", cost: 4, power: 0, type: "Spell", rarity: "U" },
-  { name: "Ghost Touch", civ: "Darkness", cost: 2, power: 0, type: "Spell", rarity: "C" },
-  { name: "Bolshack Dragon", civ: "Fire", cost: 6, power: 6000, type: "Armored Dragon", rarity: "VR" },
-  { name: "Rothus the Traveler", civ: "Fire", cost: 5, power: 4000, type: "Armored Dragon", rarity: "R" },
-  { name: "Scarlet Skyterror", civ: "Fire", cost: 8, power: 6000, type: "Armored Wyvern", rarity: "R" },
-  { name: "Pyrofighter Magnus", civ: "Fire", cost: 4, power: 3000, type: "Human", rarity: "U" },
-  { name: "Armored Blaster Valdios", civ: "Fire", cost: 4, power: 5000, type: "Human", rarity: "R" },
-  { name: "Bronze-Arm Tribe", civ: "Nature", cost: 3, power: 1000, type: "Beast Folk", rarity: "U" },
-  { name: "Silver Axe", civ: "Nature", cost: 4, power: 3000, type: "Beast Folk", rarity: "C" },
-  { name: "Tower Shell", civ: "Nature", cost: 5, power: 5000, type: "Colony Beetle", rarity: "C" },
-  { name: "Natural Snare", civ: "Nature", cost: 6, power: 0, type: "Spell", rarity: "R" },
-  { name: "Fighter Dual Fang", civ: "Nature", cost: 6, power: 8000, type: "Beast Folk", rarity: "VR" },
+  ...Object.entries(cardNamesByCiv).flatMap(([civ, names]) => names.split("|").map((name) => ({
+    name,
+    civ,
+    rarity: rarityByName.get(name),
+    image: `DM-01/${imageNameOverrides[name] || name}.jpg`,
+  }))),
+  ...Object.entries(superRareNamesByCiv).flatMap(([civ, names]) => names.map((name) => ({
+    name,
+    civ,
+    rarity: "SR",
+    image: `DM-01/${imageNameOverrides[name] || name}.jpg`,
+  }))),
 ];
-
+const cardPools = Object.fromEntries(Object.keys(cardNamesByRarity).map((rarity) => [
+  rarity,
+  cardPool.filter((card) => card.rarity === rarity),
+]));
 const bots = ["Mina", "Rook", "Jax", "Sora", "Vale", "Kite", "Ash"].map((name, index) => ({
   name,
   preference: Object.keys(civilizations)[index % 5],
   picks: [],
 }));
-const totalPacks = 3;
-const picksPerPack = 15;
+const totalPacks = 5;
+const picksPerPack = 10;
 const seatCount = 8;
 let packNumber = 0;
 let pickNumber = 0;
@@ -49,6 +62,7 @@ let playerPicks = [];
 let selectedCardId = null;
 let cardId = 0;
 let isDraftComplete = false;
+let boosterRunQueue = createDraftRunSchedule();
 
 const cardGrid = document.querySelector("#card-grid");
 const pickButton = document.querySelector("#pick-button");
@@ -68,12 +82,40 @@ function makeCard(source) {
   return { ...source, id: cardId++ };
 }
 
+function createDraftRunSchedule() {
+  const makeBox = () => shuffled([
+    ...Array(18).fill("common"),
+    ...Array(8).fill("VR"),
+    ...Array(4).fill("SR"),
+  ]);
+  return [...makeBox(), ...makeBox()];
+}
+
+function randomCard(rarity, usedNames) {
+  const available = cardPools[rarity].filter((card) => !usedNames.has(card.name));
+  const card = available[Math.floor(Math.random() * available.length)];
+  usedNames.add(card.name);
+  return card;
+}
+
 function makePack() {
-  return shuffled(Array.from({ length: picksPerPack }, () => makeCard(cardPool[Math.floor(Math.random() * cardPool.length)])));
+  const run = boosterRunQueue.shift() || "common";
+  const extraRarity = run === "common" ? null : run;
+  const usedNames = new Set();
+  const draw = (rarity) => makeCard(randomCard(rarity, usedNames));
+  const pack = [
+    draw("R"),
+    ...(extraRarity ? [draw(extraRarity)] : []),
+    ...Array.from({ length: 3 }, () => draw("U")),
+    ...Array.from({ length: extraRarity ? 5 : 6 }, () => draw("C")),
+  ];
+  const dealtPack = shuffled(pack);
+  dealtPack.runType = run;
+  return dealtPack;
 }
 
 function startPack() {
-  seatPacks = Array.from({ length: seatCount }, makePack);
+  seatPacks = Array.from({ length: seatCount }, () => makePack());
   pickNumber = 0;
   packNumber += 1;
   selectedCardId = null;
@@ -88,10 +130,9 @@ function startPack() {
 
 function botCardScore(card, bot) {
   const draftedCount = bot.picks.filter((pick) => pick.civ === card.civ).length;
-  const rarityScore = { C: 0, U: 1.5, R: 3, VR: 4.5 }[card.rarity] || 0;
-  const curveScore = card.power ? Math.min(card.power / 3000, 2) : 1.3;
+  const rarityScore = { C: 0, U: 0.4, R: 1, VR: 2.5, SR: 3.5 }[card.rarity] || 0;
   const preferenceScore = card.civ === bot.preference ? 2 : 0;
-  return rarityScore + curveScore + preferenceScore + draftedCount * 0.4 + Math.random();
+  return rarityScore + preferenceScore + draftedCount * 0.4 + Math.random();
 }
 
 function selectBotPick(pack, bot) {
@@ -125,7 +166,7 @@ function draftSelectedCard() {
   if (pickNumber >= picksPerPack) {
     if (packNumber >= totalPacks) {
       isDraftComplete = true;
-      logMessage.textContent = "All three packs are drafted. Nice work at the table.";
+      logMessage.textContent = "All five packs are drafted. Nice work at the table.";
       render();
       showSummary();
       return;
@@ -143,18 +184,18 @@ function renderCards() {
   cardGrid.replaceChildren();
   pack.forEach((card, index) => {
     const civ = civilizations[card.civ];
+    const rarityClass = { C: "common", U: "uncommon", R: "rare", VR: "very-rare", SR: "super-rare" }[card.rarity];
     const button = document.createElement("button");
     button.type = "button";
     button.className = `draft-card${card.id === selectedCardId ? " selected" : ""}`;
     button.style.setProperty("--civ", civ.color);
     button.style.animationDelay = `${Math.min(index * 14, 180)}ms`;
     button.setAttribute("aria-pressed", String(card.id === selectedCardId));
-    button.setAttribute("aria-label", `${card.name}, ${card.civ}, cost ${card.cost}${card.power ? `, power ${card.power}` : ", spell"}`);
-    button.innerHTML = `<span class="card-art" data-sigil="${civ.sigil}"><span class="cost-badge">${card.cost}</span><span class="rarity-mark">${card.rarity}</span></span><span class="card-info"><strong class="card-name">${card.name}</strong><span class="card-meta"><span>${card.type}</span><b class="card-power">${card.power ? card.power.toLocaleString() : "SPELL"}</b></span></span>`;
+    button.setAttribute("aria-label", `${card.name}, ${card.civ}, ${card.rarity}`);
+    button.innerHTML = `<img class="card-image" src="${card.image}" alt="${card.name}" loading="lazy"><span class="card-info"><strong class="card-name">${card.name}</strong><span class="card-meta"><span>${card.civ}</span><b class="rarity-badge rarity-${rarityClass}">${card.rarity}</b></span></span>`;
     button.addEventListener("click", () => {
       selectedCardId = card.id;
-      const typeLabel = card.power ? `${card.power.toLocaleString()} power` : "spell";
-      document.querySelector("#selection-note").innerHTML = `<span class="keycap">${card.civ.toUpperCase()}</span> ${card.name} / ${typeLabel}`;
+      document.querySelector("#selection-note").innerHTML = `<span class="keycap">${card.civ.toUpperCase()}</span> ${card.name}`;
       pickButton.disabled = false;
       renderCards();
     });
@@ -190,10 +231,13 @@ function render() {
   renderCards();
   renderPool();
   renderSeats();
-  document.querySelector("#pack-label").textContent = `PACK ${String(packNumber).padStart(2, "0")} / 03`;
-  document.querySelector("#pick-label").innerHTML = `PICK ${String(Math.min(pickNumber + 1, picksPerPack)).padStart(2, "0")} <i>/ 15</i>`;
+  document.querySelector("#pack-label").textContent = `PACK ${String(packNumber).padStart(2, "0")} / ${String(totalPacks).padStart(2, "0")}`;
+  document.querySelector("#pick-label").innerHTML = `PICK ${String(Math.min(pickNumber + 1, picksPerPack)).padStart(2, "0")} <i>/ ${picksPerPack}</i>`;
   document.querySelector("#pack-progress-fill").style.width = `${Math.max(6.67, (pickNumber / picksPerPack) * 100)}%`;
-  document.querySelector("#table-subtitle").textContent = isDraftComplete ? "Draft complete." : `${seatPacks[0]?.length || 0} cards in the pack passed to you.`;
+  const runLabels = { common: "common", VR: "very-rare", SR: "super-rare" };
+  document.querySelector("#table-subtitle").textContent = isDraftComplete
+    ? "Draft complete."
+    : `${seatPacks[0]?.length || 0} cards / ${runLabels[seatPacks[0]?.runType] || "common"} run`;
   document.querySelector("#selection-note").innerHTML = '<span class="keycap">CLICK</span> a card to inspect it';
   pickButton.disabled = selectedCardId === null || isDraftComplete;
 }
@@ -215,6 +259,7 @@ function restartDraft() {
   playerPicks = [];
   selectedCardId = null;
   cardId = 0;
+  boosterRunQueue = createDraftRunSchedule();
   isDraftComplete = false;
   bots.forEach((bot) => { bot.picks = []; });
   summaryModal.classList.add("hidden");
