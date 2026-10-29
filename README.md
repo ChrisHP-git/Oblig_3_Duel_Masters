@@ -2,6 +2,12 @@
 
 A standalone browser prototype for drafting DM-01 against seven bots.
 
+## Task
+
+This is a task were we had to vibe coded an application. 
+For this task I made a Duel Masters draft application where you draft agianst bots.
+The Ai used to vibe code the application was Copilot.
+
 ## Run
 
 Open `index.html` in a browser. No install or server is required.
